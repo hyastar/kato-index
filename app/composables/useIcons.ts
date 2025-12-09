@@ -7,6 +7,7 @@ export const icons = {
   tools: 'mdi:toolbox',
   sitemap: 'mdi:sitemap',
   globe: 'mdi:web',
+  user: 'mdi:account',
   
   // 社交与联系
   github: 'mdi:github',

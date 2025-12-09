@@ -23,6 +23,10 @@
           <Icon :name="icons.university" />
           <span>YTU</span>
         </div>
+        <div class="info-row">
+          <Icon :name="icons.user" />
+          <span>{{ age }} 岁</span>
+        </div>
       </div>
 
       <div class="tags">
@@ -60,9 +64,18 @@ import { currentLang } from '~/composables/useLanguage'
 import { icons } from '~/composables/useIcons'
 import { profileTranslations, formatDate } from '~/data/profile'
 
+const BIRTHDAY = new Date('2004-08-22T00:00:00Z')
+
 const t = computed(() => profileTranslations[currentLang.value])
 const tags = computed(() => t.value.tags)
 const timeline = computed(() => t.value.timeline)
+
+const age = computed(() => {
+  const now = Date.now()
+  const diffMs = now - BIRTHDAY.getTime()
+  const years = diffMs / (1000 * 60 * 60 * 24 * 365.25)
+  return years.toFixed(1)
+})
 </script>
 
 <style scoped>

@@ -51,8 +51,8 @@
           :key="idx"
           class="dot"
           :class="`dot-level-${cell.level}`"
-          :title="`贡献等级 ${cell.level}`"
-          :aria-label="`贡献等级 ${cell.level}`"
+        :title="cell.date ? `${cell.date} 提交 ${cell.count} 次` : ''"
+        :aria-label="cell.date ? `${cell.date} 提交 ${cell.count} 次` : ''"
         ></div>
       </div>
       <div class="progress">
@@ -220,14 +220,19 @@ const getLevelFromCount = (count: number): number => {
   return 4
 }
 
-type GridCell = { level: number }
+type GridCell = { level: number; count: number; date?: string }
 
 const gridCells = ref<GridCell[]>([])
 const totalContributions = ref(0)
 
-const { data, error } = await useFetch(
-  `https://github-contributions-api.jogruber.de/v4/${GITHUB_USERNAME}?y=last`,
-)
+const { data, error } = await useFetch('https://proxy.hyastar.top/api/github', {
+  query: {
+    username: GITHUB_USERNAME,
+  },
+  headers: {
+    'x-api-key': 'kato_passwd',
+  },
+})
 
 if (data.value && !error.value) {
   const contributions = (data.value as any).contributions
@@ -238,18 +243,35 @@ if (data.value && !error.value) {
   totalContributions.value = firstKey ? totals?.[firstKey] ?? 0 : 0
 
   const flatDays = contributions.flat()
-  const lastDays = flatDays.slice(-GRID_SIZE)
+  const lastDay = flatDays.at(-1)
 
-  gridCells.value = lastDays.map((day: any) => ({
-    level: getLevelFromCount(day.count),
-  }))
+  if (lastDay?.date) {
+    const lastDate = new Date(lastDay.date)
+    const dayOfWeek = lastDate.getDay() // 0-6, 周日-周六
+    const padCount = 6 - dayOfWeek
+    const filler = Array.from({ length: padCount }, () => ({
+      level: 0,
+      count: 0,
+      date: '',
+    }))
+
+    const paddedDays = [...flatDays, ...filler]
+    const finalDays = paddedDays.slice(-GRID_SIZE)
+
+    gridCells.value = finalDays.map((day: any) => ({
+      level: getLevelFromCount(day.count),
+      count: day.count,
+      date: day.date ? String(day.date).replace(/-/g, '.') : '',
+    }))
+  }
 } else {
-  // 生成随机但真实的贡献图数据
+  console.error('GitHub API 请求失败:', error.value)
   gridCells.value = Array.from({ length: GRID_SIZE }, () => ({
-    level: generateRandomLevel(),
+    level: 0,
+    count: 0,
+    date: '',
   }))
-  // 计算模拟的总贡献数
-  totalContributions.value = gridCells.value.reduce((sum, cell) => sum + cell.level * 2, 0)
+  totalContributions.value = 0
 }
 
 const progress = computed(() => {
@@ -464,7 +486,9 @@ function getColorRgb(hex: string): string {
 
 .grid {
   display: grid;
-  grid-template-columns: repeat(22, 1fr);
+  grid-template-rows: repeat(7, 1fr);
+  grid-auto-flow: column;
+  grid-auto-columns: 1fr;
   gap: 4px;
   margin-bottom: 14px;
 }
@@ -808,10 +832,6 @@ function getColorRgb(hex: string): string {
     font-size: 38px;
   }
 
-  .grid {
-    grid-template-columns: repeat(16, 1fr);
-  }
-  
   .copy-toast {
     bottom: 16px;
     right: 16px;
