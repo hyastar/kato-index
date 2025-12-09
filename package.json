@@ -1,0 +1,27 @@
+{
+  "name": "kato-index",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "badges:fetch": "node scripts/fetch-badges.mjs",
+    "build": "pnpm badges:fetch && nuxt build",
+    "dev": "nuxt dev",
+    "generate": "nuxt generate",
+    "preview": "nuxt preview",
+    "postinstall": "nuxt prepare"
+  },
+  "dependencies": {
+    "nuxt": "^4.2.1",
+    "vue": "^3.5.25",
+    "vue-router": "^4.6.3"
+  },
+  "devDependencies": {
+    "@iconify-json/logos": "^1.2.10",
+    "@iconify-json/mdi": "^1.2.3",
+    "@iconify-json/ri": "^1.2.6",
+    "@iconify-json/simple-icons": "^1.2.62",
+    "@iconify-json/uil": "^1.2.3",
+    "@nuxt/icon": "^2.1.0",
+    "sass": "^1.94.2"
+  }
+}
