@@ -225,13 +225,11 @@ type GridCell = { level: number; count: number; date?: string }
 const gridCells = ref<GridCell[]>([])
 const totalContributions = ref(0)
 
-const { data, error } = await useFetch('https://proxy.hyastar.top/api/github', {
+const { data, error } = await useFetch('/api/github', {
   query: {
     username: GITHUB_USERNAME,
   },
-  headers: {
-    'x-api-key': 'kato_passwd',
-  },
+  // 不再需要在这里写 headers 和 key！
 })
 
 if (data.value && !error.value) {

@@ -29,7 +29,7 @@ export const tools: Tool[] = [
   { type: 'icon', name: 'logos:nginx', label: 'Nginx' },
   { type: 'icon', name: 'logos:vercel-icon', label: 'Vercel' },
   { type: 'icon', name: 'simple-icons:cloudflare', label: 'Cloudflare' },
-  { type: 'img', src: '/ICON/edgeone-logo.png', label: 'Tencent EdgeOne' },
+  { type: 'img', src: '/ICON/edgeone-logo.avif', label: 'Tencent EdgeOne' },
   { type: 'icon', name: 'simple-icons:tailscale', label: 'Tailscale' },
   { type: 'icon', name: 'simple-icons:termius', label: 'Termius' },
   { type: 'icon', name: 'simple-icons:mqtt', label: 'MQTT' },
@@ -53,8 +53,8 @@ export const tools: Tool[] = [
   // --- 4. 嵌入式 / 硬件 ---
   { type: 'icon', name: 'logos:arduino', label: 'Arduino' },
   { type: 'icon', name: 'logos:raspberry-pi', label: 'Raspberry Pi' },
-  { type: 'img', src: '/ICON/altera-logo-tm-alterablue-3000.png', label: 'Quartus' },
-  { type: 'img', src: '/ICON/jlc-eda-logo.png', label: '嘉立创EDA' },
+  { type: 'img', src: '/ICON/altera-logo-tm-alterablue-3000.avif', label: 'Quartus' },
+  { type: 'img', src: '/ICON/jlc-eda-logo.avif', label: '嘉立创EDA' },
   { type: 'icon', name: 'simple-icons:multisim', label: 'Multisim' },
   { type: 'icon', name: 'simple-icons:linux', label: 'Embedded Linux' },
   { type: 'icon', name: 'simple-icons:stmicroelectronics', label: 'STM32' },
@@ -62,7 +62,7 @@ export const tools: Tool[] = [
   { type: 'icon', name: 'simple-icons:intel', label: 'FPGA' },
 
   // --- 5. 工程建模 / 设计 ---
-  { type: 'img', src: '/ICON/Solidworks-logo_red.png', label: 'SOLIDWORKS' },
+  { type: 'img', src: '/ICON/Solidworks-logo_red.avif', label: 'SOLIDWORKS' },
   { type: 'img', src: '/ICON/mathworks-logo.svg', label: 'MATLAB' },
   { type: 'icon', name: 'logos:blender', label: 'Blender' },
   { type: 'icon', name: 'simple-icons:adobephotoshop', label: 'Photoshop' },

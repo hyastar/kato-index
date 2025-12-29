@@ -1,35 +1,3 @@
-@font-face {
-  font-family: 'LXGW WenKai Screen';
-  src: url('/fonts/LXGWWenKaiScreen.ttf') format('truetype');
-  font-weight: normal;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: 'LXGW WenKai GB Screen';
-  src: url('/fonts/LXGWWenKaiGBScreen.ttf') format('truetype');
-  font-weight: normal;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: 'LXGW WenKai Mono Screen';
-  src: url('/fonts/LXGWWenKaiMonoScreen.ttf') format('truetype');
-  font-weight: normal;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: 'LXGW WenKai Mono GB Screen';
-  src: url('/fonts/LXGWWenKaiMonoGBScreen.ttf') format('truetype');
-  font-weight: normal;
-  font-style: normal;
-  font-display: swap;
-}
-
 :root {
   /* Design Tokens - 视觉一致性系统 */
   --bg0: rgba(7, 26, 69, 0.92);
@@ -43,8 +11,8 @@
   --muted: rgba(255, 255, 255, 0.65);
   
   /* 字体系统 */
-  --font-main: 'LXGW WenKai Screen', 'LXGW WenKai GB Screen', system-ui, sans-serif;
-  --font-mono: 'LXGW WenKai Mono Screen', 'LXGW WenKai Mono GB Screen', monospace;
+  --font-main: "LXGW WenKai Screen", system-ui, sans-serif;
+  --font-mono: "LXGW WenKai Mono", monospace;
   
   /* 兼容旧变量 */
   --bg-color: #f0f2f5;
@@ -64,6 +32,16 @@
   --glass-border: rgba(255, 255, 255, 0.1);
 }
 
+html,
+body {
+  font-family: var(--font-main);
+}
+
+pre,
+code {
+  font-family: var(--font-mono);
+}
+
 *,
 *::before,
 *::after {
@@ -73,7 +51,6 @@
 body {
   margin: 0;
   padding: 0;
-  font-family: var(--font-main);
   background-color: #0a1229;
   color: var(--text);
   transition: background 0.3s ease, color 0.3s ease;

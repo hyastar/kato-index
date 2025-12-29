@@ -4,13 +4,13 @@
       <div class="avatar-wrapper">
         <img
           class="avatar"
-          src="/avatar.webp"
+          src="/avatar.avif"
           alt="Avatar Me"
         />
         <Icon :name="icons.heart" class="avatar-heart" />
         <img
           class="avatar"
-          src="/kato.webp"
+          src="/kato.avif"
           alt="Avatar Kato"
         />
       </div>

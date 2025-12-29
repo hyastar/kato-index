@@ -11,6 +11,8 @@
     "postinstall": "nuxt prepare"
   },
   "dependencies": {
+    "dotenv": "^17.2.3",
+    "lxgw-wenkai-screen-webfont": "^1.7.0",
     "nuxt": "^4.2.1",
     "vue": "^3.5.25",
     "vue-router": "^4.6.3"
@@ -21,7 +23,9 @@
     "@iconify-json/ri": "^1.2.6",
     "@iconify-json/simple-icons": "^1.2.62",
     "@iconify-json/uil": "^1.2.3",
+    "@konghayao/cn-font-split": "^4.15.0",
     "@nuxt/icon": "^2.1.0",
-    "sass": "^1.94.2"
+    "sass": "^1.94.2",
+    "sharp": "^0.34.5"
   }
 }
