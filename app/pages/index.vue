@@ -5,6 +5,9 @@ const moeIcpLabel = config.public.moeIcpLabel
 const moeIcpSuffix = config.public.moeIcpSuffix
 const govIcp = config.public.govIcpCode
 const govIcpLabel = config.public.govIcpLabel
+
+// 调试信息
+console.log('Config:', config.public)
 </script>
 
 <template>

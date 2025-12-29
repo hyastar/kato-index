@@ -96,6 +96,7 @@ export default defineNuxtConfig({
     githubApiKey: '',
     // 公开变量，可在浏览器端访问
     public: {
+      // 显式声明，方便 index.vue 读取
       moeIcpCode: '',
       moeIcpLabel: '',
       moeIcpSuffix: '',
