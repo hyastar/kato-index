@@ -161,6 +161,7 @@ import { icons } from '~/composables/useIcons'
 import { coreSkills } from '~/data/skills'
 import { tools } from '~/data/tools'
 import { mainTranslations, social } from '~/data/main'
+import cachedData from '~/data/github-data.json'
 
 const { currentLang } = useLanguage()
 
@@ -207,17 +208,7 @@ const GRID_SIZE = GRID_COLUMNS * GRID_ROWS
 
 const GITHUB_USERNAME = 'hyastar'
 
-// 生成随机贡献等级 (0-4)，模拟真实 GitHub 贡献图
-const generateRandomLevel = (): number => {
-  const rand = Math.random()
-  // 大部分是 0 或 1，少部分是 3 或 4，模拟真实提交模式
-  if (rand < 0.5) return 0 // 50% 无贡献
-  if (rand < 0.75) return 1 // 25% 低贡献
-  if (rand < 0.9) return 2 // 15% 中贡献
-  if (rand < 0.97) return 3 // 7% 高贡献
-  return 4 // 3% 极高贡献
-}
-
+// 移除了所有随机数据生成逻辑，现在只使用真实数据
 const getLevelFromCount = (count: number): number => {
   if (count === 0) return 0
   if (count <= 2) return 1
@@ -231,25 +222,22 @@ type GridCell = { level: number; count: number; date?: string }
 const gridCells = ref<GridCell[]>([])
 const totalContributions = ref(0)
 
-// 使用 useAsyncData 确保 SSR 兼容性，添加错误处理避免水合失败
-const { data, error } = await useAsyncData('github-contributions', async () => {
-  try {
-    return await $fetch('/api/github', {
-      query: {
-        username: GITHUB_USERNAME,
-      }
-    })
-  } catch (e) {
-    // SSR 阶段兜底：不要 throw，确保返回 null 而不是抛出异常
-    console.warn('GitHub API fetch failed in SSR:', e)
-    return null
+// 缓存数据初始化现在由 useAsyncData 的 default 参数处理
+// 尝试获取最新数据（如果API可用），使用缓存数据作为默认值
+const { data } = await useAsyncData('github-contributions',
+  () => $fetch('/api/github', {
+    query: { username: GITHUB_USERNAME }
+  }),
+  // default 参数：当API请求进行中时，直接使用缓存数据，避免空白状态
+  {
+    default: () => cachedData && cachedData.contributions && cachedData.contributions.length > 0 ? cachedData : null
   }
-})
+)
 
-// 处理数据
-if (data.value) {
-  const contributions = (data.value as any).contributions
-  const totals = (data.value as any).total
+// 将数据处理逻辑封装成函数，方便复用
+function processData(source: any) {
+  const contributions = source.contributions
+  const totals = source.total
 
   const totalKeys = Object.keys(totals || {})
   const firstKey = totalKeys.at(0)
@@ -277,8 +265,24 @@ if (data.value) {
       date: day.date ? String(day.date).replace(/-/g, '.') : '',
     }))
   }
+}
+
+// 处理数据：useAsyncData 的 default 已经提供了缓存数据，这里只需要处理 API 成功的情况
+if (data.value && data.value.contributions) {
+  // 检查这是否是真实的API数据（而不是default提供的缓存数据）
+  const isApiData = data.value !== cachedData
+
+  if (isApiData) {
+    // 🟢 API 获取成功，使用最新数据
+    console.log('Using fresh API data')
+    processData(data.value)
+  } else {
+    // 🟡 使用缓存数据（由 default 参数提供）
+    console.log('Using cached data from default')
+  }
 } else {
-  // 静默失败，使用默认数据
+  // 🔴 场景：API失败且无缓存数据，显示空白状态
+  console.log('No data available, using empty state')
   gridCells.value = Array.from({ length: GRID_SIZE }, () => ({
     level: 0,
     count: 0,
@@ -286,7 +290,6 @@ if (data.value) {
   }))
   totalContributions.value = 0
 }
-
 const progress = computed(() => {
   const target = 1000
   const p = (totalContributions.value / target) * 100
@@ -512,7 +515,7 @@ function getColorRgb(hex: string): string {
   width: 12px;
   height: 12px;
   border-radius: 3px;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  transition: background-color 0.5s ease-in-out, transform 0.2s ease, box-shadow 0.2s ease;
 }
 
 /* GitHub 深色模式配色 - Level 0-4 */

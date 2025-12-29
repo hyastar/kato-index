@@ -91,8 +91,16 @@ export default defineNuxtConfig({
 
   ssr: true,
   runtimeConfig: {
-    // 明确从环境变量读取值
+    // 服务端变量
     githubApiUrl: '',
     githubApiKey: '',
+    // 公开变量，可在浏览器端访问
+    public: {
+      moeIcpCode: '',
+      moeIcpLabel: '',
+      moeIcpSuffix: '',
+      govIcpCode: '',
+      govIcpLabel: '',
+    }
   }
 })

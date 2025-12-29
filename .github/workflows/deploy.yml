@@ -10,12 +10,30 @@ jobs:
     permissions:
       contents: write     # 允许 Action 推送代码
     steps:
-      - uses: actions/checkout@v4
-      
-      - name: Trigger EdgeOne Build
-        run: |
-          git config --global user.name "github-actions[bot]"
-          git config --global user.email "github-actions[bot]@users.noreply.github.com"
-          # 创建一个空提交，附带时间戳，确保每次 commit message 不同
-          git commit --allow-empty -m "chore: scheduled build at $(date -u)"
-          git push origin main # 确保这里是你 EdgeOne 监听的分支名
+          - uses: actions/checkout@v4
+            with:
+              fetch-depth: 0 # 获取完整历史以确保能推送
+              ref: main # 拉取主分支代码
+
+          - name: Install Node.js
+            uses: actions/setup-node@v4
+            with:
+              node-version: 20
+
+          - name: Fetch and Cache Github Data
+            run: node scripts/fetch-github.mjs
+            env:
+              NUXT_GITHUB_API_URL: ${{ secrets.NUXT_GITHUB_API_URL }}
+              NUXT_GITHUB_API_KEY: ${{ secrets.NUXT_GITHUB_API_KEY }}
+
+          - name: Sync and Push to Build Branch
+            run: |
+              git config --global user.name "github-actions[bot]"
+              git config --global user.email "github-actions[bot]@users.noreply.github.com"
+
+              # 如果 github-data.json 发生了变化，就提交它
+              git add app/data/github-data.json
+              git diff --quiet && git diff --staged --quiet || (git commit -m "chore: update github contribution cache" && git push origin main)
+
+              # 无论是否有新数据，都强制推送触发 EdgeOne 构建
+              git push origin main:build --force

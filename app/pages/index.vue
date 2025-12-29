@@ -1,3 +1,12 @@
+<script setup>
+const config = useRuntimeConfig()
+const moeIcp = config.public.moeIcpCode
+const moeIcpLabel = config.public.moeIcpLabel
+const moeIcpSuffix = config.public.moeIcpSuffix
+const govIcp = config.public.govIcpCode
+const govIcpLabel = config.public.govIcpLabel
+</script>
+
 <template>
   <div class="layout-container">
     <div class="bg-overlay"></div>
@@ -8,20 +17,20 @@
 
     <footer class="site-footer">
       <div class="footer-badges">
-        <a href="https://icp.gov.moe/?keyword=20233434" target="_blank" rel="noopener noreferrer" class="custom-badge moe-badge">
+        <a :href="`https://icp.gov.moe/?keyword=${moeIcp}`" target="_blank" rel="noopener noreferrer" class="custom-badge moe-badge">
           <span class="badge-icon">
             <img src="/ICP/moe-icp.avif" alt="Moe Icon" width="14" height="14" />
           </span>
-          <span class="badge-label">萌ICP备</span>
-          <span class="badge-code">20233434号</span>
+          <span class="badge-label">{{ moeIcpLabel }}</span>
+          <span class="badge-code">{{ moeIcp }}{{ moeIcpSuffix }}</span>
         </a>
 
         <a href="https://beian.miit.gov.cn/" target="_blank" rel="noopener noreferrer" class="custom-badge gov-badge">
           <span class="badge-icon">
             <img src="/ICP/gov-icp.avif" alt="Gov Icon" width="14" height="14" />
           </span>
-          <span class="badge-label">鲁ICP备</span>
-          <span class="badge-code">2023037451号-3</span>
+          <span class="badge-label">{{ govIcpLabel }}</span>
+          <span class="badge-code">{{ govIcp }}</span>
         </a>
       </div>
     </footer>
