@@ -1,0 +1,21 @@
+name: Scheduled Trigger for EdgeOne
+on:
+  schedule:
+    - cron: '0 16 * * *' # 每天北京时间 0:00 (UTC 16:00) 触发
+  workflow_dispatch:      # 允许手动点击按钮触发
+
+jobs:
+  trigger_deploy:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write     # 允许 Action 推送代码
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Trigger EdgeOne Build
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          # 创建一个空提交，附带时间戳，确保每次 commit message 不同
+          git commit --allow-empty -m "chore: scheduled build at $(date -u)"
+          git push origin main # 确保这里是你 EdgeOne 监听的分支名

@@ -6,12 +6,20 @@
           class="avatar"
           src="/avatar.avif"
           alt="Avatar Me"
+          width="80"
+          height="80"
+          loading="eager"
+          decoding="async"
         />
         <Icon :name="icons.heart" class="avatar-heart" />
         <img
           class="avatar"
           src="/kato.avif"
           alt="Avatar Kato"
+          width="80"
+          height="80"
+          loading="eager"
+          decoding="async"
         />
       </div>
       <div class="info">
@@ -59,10 +67,12 @@
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue'
-import { currentLang } from '~/composables/useLanguage'
+import { computed, ref, onMounted } from 'vue'
+import { useLanguage } from '~/composables/useLanguage'
 import { icons } from '~/composables/useIcons'
 import { profileTranslations, formatDate } from '~/data/profile'
+
+const { currentLang } = useLanguage()
 
 const BIRTHDAY = new Date('2004-08-22T00:00:00Z')
 
@@ -70,11 +80,17 @@ const t = computed(() => profileTranslations[currentLang.value])
 const tags = computed(() => t.value.tags)
 const timeline = computed(() => t.value.timeline)
 
-const age = computed(() => {
-  const now = Date.now()
-  const diffMs = now - BIRTHDAY.getTime()
-  const years = diffMs / (1000 * 60 * 60 * 24 * 365.25)
-  return years.toFixed(1)
+const age = ref('21.4') // 服务端使用静态默认值
+
+onMounted(() => {
+  const updateAge = () => {
+    const now = Date.now()
+    const diffMs = now - BIRTHDAY.getTime()
+    const years = diffMs / (1000 * 60 * 60 * 24 * 365.25)
+    age.value = years.toFixed(1) // 仅在客户端挂载后更新准确值
+  }
+
+  updateAge()
 })
 </script>
 
@@ -97,9 +113,11 @@ const age = computed(() => {
   }
 }
 
-.fade-in-up {
-  animation: fade-in-up 0.6s ease-out forwards;
-  opacity: 0;
+@media (prefers-reduced-motion: no-preference) {
+  .fade-in-up {
+    animation: fade-in-up 0.6s ease-out forwards;
+    opacity: 0;
+  }
 }
 
 .profile-box {

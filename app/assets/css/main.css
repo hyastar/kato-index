@@ -32,8 +32,14 @@
   --glass-border: rgba(255, 255, 255, 0.1);
 }
 
-html,
+html {
+  font-size: 15px; /* 16 -> 15，整体小一档 */
+  font-family: "LXGW WenKai Screen", system-ui, sans-serif;
+  line-height: 1.6;
+}
+
 body {
+  font-size-adjust: none; /* 关键：中文字体别用这个校正 */
   font-family: var(--font-main);
 }
 
@@ -84,6 +90,21 @@ ul {
 
 .font-mono {
   font-family: var(--font-mono);
+}
+
+/* 图片优化样式 */
+.skill-badge {
+  width: 88px;
+  height: 20px;
+  display: inline-block;
+}
+
+.tool-icon {
+  width: 24px;
+  height: 24px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .glass-card {

@@ -10,7 +10,7 @@
       <div class="footer-badges">
         <a href="https://icp.gov.moe/?keyword=20233434" target="_blank" rel="noopener noreferrer" class="custom-badge moe-badge">
           <span class="badge-icon">
-            <img src="/ICP/moe-icp.avif" alt="Moe Icon" />
+            <img src="/ICP/moe-icp.avif" alt="Moe Icon" width="14" height="14" />
           </span>
           <span class="badge-label">萌ICP备</span>
           <span class="badge-code">20233434号</span>
@@ -18,7 +18,7 @@
 
         <a href="https://beian.miit.gov.cn/" target="_blank" rel="noopener noreferrer" class="custom-badge gov-badge">
           <span class="badge-icon">
-            <img src="/ICP/gov-icp.avif" alt="Gov Icon" />
+            <img src="/ICP/gov-icp.avif" alt="Gov Icon" width="14" height="14" />
           </span>
           <span class="badge-label">鲁ICP备</span>
           <span class="badge-code">2023037451号-3</span>

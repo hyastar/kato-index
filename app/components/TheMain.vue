@@ -106,6 +106,8 @@
           :alt="skill.name"
           loading="lazy"
           decoding="async"
+          width="auto"
+          height="28"
           class="skill-badge-shield"
           @error="(e) => ((e.target as HTMLImageElement).src = skill.url)"
         />
@@ -119,6 +121,10 @@
               :src="tool.src"
               :alt="tool.label"
               :title="tool.label"
+              width="120"
+              height="24"
+              loading="lazy"
+              decoding="async"
               class="tool-img"
             />
             <svg
@@ -150,13 +156,13 @@
 
 <script setup lang="ts">
 import { computed, onMounted, ref } from 'vue'
-import { currentLang, useLanguage, type Lang } from '~/composables/useLanguage'
+import { useLanguage, type Lang } from '~/composables/useLanguage'
 import { icons } from '~/composables/useIcons'
 import { coreSkills } from '~/data/skills'
 import { tools } from '~/data/tools'
 import { mainTranslations, social } from '~/data/main'
 
-useLanguage()
+const { currentLang } = useLanguage()
 
 // 读取 badge manifest，本地优先
 const badgeManifest = ref<Record<string, string>>({})
@@ -225,14 +231,23 @@ type GridCell = { level: number; count: number; date?: string }
 const gridCells = ref<GridCell[]>([])
 const totalContributions = ref(0)
 
-const { data, error } = await useFetch('/api/github', {
-  query: {
-    username: GITHUB_USERNAME,
-  },
-  // 不再需要在这里写 headers 和 key！
+// 使用 useAsyncData 确保 SSR 兼容性，添加错误处理避免水合失败
+const { data, error } = await useAsyncData('github-contributions', async () => {
+  try {
+    return await $fetch('/api/github', {
+      query: {
+        username: GITHUB_USERNAME,
+      }
+    })
+  } catch (e) {
+    // SSR 阶段兜底：不要 throw，确保返回 null 而不是抛出异常
+    console.warn('GitHub API fetch failed in SSR:', e)
+    return null
+  }
 })
 
-if (data.value && !error.value) {
+// 处理数据
+if (data.value) {
   const contributions = (data.value as any).contributions
   const totals = (data.value as any).total
 
@@ -263,7 +278,7 @@ if (data.value && !error.value) {
     }))
   }
 } else {
-  console.error('GitHub API 请求失败:', error.value)
+  // 静默失败，使用默认数据
   gridCells.value = Array.from({ length: GRID_SIZE }, () => ({
     level: 0,
     count: 0,
@@ -304,9 +319,11 @@ function getColorRgb(hex: string): string {
   }
 }
 
-.fade-in-up {
-  animation: fade-in-up 0.6s ease-out forwards;
-  opacity: 0;
+@media (prefers-reduced-motion: no-preference) {
+  .fade-in-up {
+    animation: fade-in-up 0.6s ease-out forwards;
+    opacity: 0;
+  }
 }
 
 .hero {
