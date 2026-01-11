@@ -1,43 +1,8 @@
 {
   "total": {
-    "lastYear": 167
+    "lastYear": 168
   },
   "contributions": [
-    {
-      "date": "2025-01-05",
-      "count": 3,
-      "level": 1
-    },
-    {
-      "date": "2025-01-06",
-      "count": 2,
-      "level": 1
-    },
-    {
-      "date": "2025-01-07",
-      "count": 0,
-      "level": 0
-    },
-    {
-      "date": "2025-01-08",
-      "count": 0,
-      "level": 0
-    },
-    {
-      "date": "2025-01-09",
-      "count": 0,
-      "level": 0
-    },
-    {
-      "date": "2025-01-10",
-      "count": 0,
-      "level": 0
-    },
-    {
-      "date": "2025-01-11",
-      "count": 0,
-      "level": 0
-    },
     {
       "date": "2025-01-12",
       "count": 0,
@@ -1856,6 +1821,11 @@
     {
       "date": "2026-01-10",
       "count": 4,
+      "level": 1
+    },
+    {
+      "date": "2026-01-11",
+      "count": 1,
       "level": 1
     }
   ]
